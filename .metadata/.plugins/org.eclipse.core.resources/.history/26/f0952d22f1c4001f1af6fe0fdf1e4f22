@@ -1,0 +1,7 @@
+package rmi_de2;
+
+import java.rmi.Remote;
+
+public interface IUser extends Remote {
+
+}

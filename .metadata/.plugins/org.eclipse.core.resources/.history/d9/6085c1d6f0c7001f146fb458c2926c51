@@ -1,0 +1,38 @@
+package rmi_1;
+
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class UserDAO extends UnicastRemoteObject implements IUser{
+
+	protected UserDAO() throws RemoteException {
+	}
+
+	@Override
+	public boolean checkUsername(String username) throws RemoteException {
+		Connection connection = Connector.getConnection();
+		String query = "Select * From users Where username = ?";
+		PreparedStatement preparedStatement;
+		try {
+			preparedStatement.setString(1, username);
+			preparedStatement = connection.prepareStatement(query);
+			ResultSet rs = preparedStatement.executeQuery();
+			return rs.next();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean checkLogin(String username, String password) throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+}

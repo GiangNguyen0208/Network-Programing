@@ -1,0 +1,105 @@
+package rmi_de2;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
+public class Client {
+	public static void main(String[] args) throws RemoteException, NotBoundException {
+		try {
+			Registry registry = LocateRegistry.getRegistry(9630);
+			IUser userDAO = (IUser) registry.lookup("userDAO");
+			IStudent studentDAO = (IStudent) registry.lookup("studentDAO");
+			BufferedReader line = new BufferedReader(new InputStreamReader(System.in));
+			String userInput = "";
+			String status ="";
+			String username = "", password = "";
+			boolean isLogin = false;
+			
+			System.out.println("WELCOME TO MANAGE PRODUCT SYSTEM");
+			while (true) {
+				try {
+					userInput = line.readLine();
+					StringTokenizer tokenizer = new StringTokenizer(userInput, "\t");
+					String cmd = tokenizer.nextToken().toUpperCase();
+					String param = tokenizer.hasMoreTokens() ? tokenizer.nextToken() : "";
+					
+					if (!isLogin) {
+						if ("EXIT".equalsIgnoreCase(userInput)) {
+							System.out.println("EXIT System....");
+							break;
+						}
+						switch (cmd) {
+						case "USER": {
+							username = param;
+							status = (userDAO.checkUsername(username)) ? "OK" : "FALSE";
+							System.out.println("Username: " + status);
+							break;
+						}
+						case "PASS": {
+							password = param;
+							isLogin = userDAO.login(username, password);
+							status = (isLogin) ? "OK" : "FALSE";
+							System.out.println("Login: " + status);
+							break;
+						}
+						default:
+							System.out.println("WRONG CMD !!!");
+						}
+					} else {
+						List<String> parameters = new ArrayList<String>();
+						while (tokenizer.hasMoreTokens()) {
+							parameters.add(tokenizer.nextToken());
+						}
+						if ("QUIT".equalsIgnoreCase(userInput)) {
+							System.out.println("EXIT System....");
+							break;
+						}
+						switch (cmd) {
+						case "ADD": {
+							status = (studentDAO.add(new Student(Integer.valueOf(parameters.get(0)), parameters.get(1),
+									Integer.valueOf(parameters.get(2)), Double.valueOf(parameters.get(3))))) ? "OK" : "FALSE";
+							System.out.println("ADD Student: " + status);
+							break;
+						}
+						case "REMOVE": {
+							status = (studentDAO.remove(Integer.valueOf(parameters.get(0)))) ? "OK" : "FALSE";
+							System.out.println("ADD Student: " + status);
+							break;
+						}
+						case "VIEW": {
+							List<Student> students = (studentDAO.view(parameters.get(0)));
+							System.out.println("View Table Student");
+							for (Student student : students) {
+								System.out.println(status.toString());
+							}
+							break;
+						}
+						case "FBN": {
+							List<Student> students = (studentDAO.viewByName(parameters.get(0)));
+							System.out.println("View Table By Name Student: " + parameters.get(0));
+							for (Student student : students) {
+								System.out.println(status.toString());
+							}
+							break;
+						}
+						default:
+							System.out.println("WRONG CMD !!!");
+						}
+					}
+				} catch (IOException e) {
+					System.out.println("WRONG CMD !!!");
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("WRONG CMD !!!");
+		}
+	}
+}

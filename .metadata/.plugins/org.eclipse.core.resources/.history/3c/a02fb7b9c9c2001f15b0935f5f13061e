@@ -1,0 +1,14 @@
+package rmi_de1;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class JDBCConnector {
+	private static Connection conn;
+	static {
+		
+		conn = DriverManager
+		
+	}
+	
+}

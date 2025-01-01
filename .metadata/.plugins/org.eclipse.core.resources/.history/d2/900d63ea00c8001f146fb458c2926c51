@@ -1,0 +1,38 @@
+package rmi_2;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+
+public class Client {
+	public static void main(String[] args) throws RemoteException, NotBoundException {
+		try {
+			Registry registry = LocateRegistry.getRegistry(12345);
+			IUser userDAO = (IUser) registry.lookup("userDAO");
+			IProduct productDAO = (IProduct) registry.lookup("productDAO");
+			BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+			
+			System.out.println("WELCOM TO STUDENT SYSTEM");
+			String userInput = "";
+			String username = "", password ="", status = "";
+			String sessionID = "";
+			
+			while (!sessionID.isEmpty()) {
+				System.out.println("Enter Command (EXIT Command to Exit): ");
+				userInput = input.readLine();
+				if (userInput.equalsIgnoreCase("EXIT")) {
+					System.out.println("SYSTEM EXIT...");
+					break;
+					
+				}
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+	}
+}

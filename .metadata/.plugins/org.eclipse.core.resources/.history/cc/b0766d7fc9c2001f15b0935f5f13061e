@@ -1,0 +1,13 @@
+package rmi_de1;
+
+import java.sql.Connection;
+
+public class JDBCConnector {
+	private static Connection conn;
+	static {
+		
+		conn = 
+		
+	}
+	
+}

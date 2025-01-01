@@ -1,0 +1,13 @@
+INDEX VERSION 1.134+C:\Users\Public\Eclipse\Lab_NetWork\src\rmi_demo\.metadata\.plugins\org.eclipse.jdt.core
+1494596977.index
+4071885092.index
+2424260922.index
+1487545351.index
+1865701400.index
+3121361793.index
+1191699177.index
+3590195747.index
+90522834.index
+3206318238.index
+352556021.index
+1865797976.index

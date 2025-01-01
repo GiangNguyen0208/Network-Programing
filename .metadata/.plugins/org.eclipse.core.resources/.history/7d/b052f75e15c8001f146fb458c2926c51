@@ -1,0 +1,9 @@
+package tcp_1;
+
+import java.sql.SQLException;
+
+public interface IProduct {
+	public boolean add(Product newProduct) throws SQLException;
+	public boolean edit(Product updateProduct) throws SQLException;
+	public boolean remove(int id) throws SQLException;
+}

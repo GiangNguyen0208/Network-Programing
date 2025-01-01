@@ -1,0 +1,10 @@
+package tcp;
+
+import java.util.List;
+
+public interface IProductDAO {
+	public boolean add(Product newProduct);
+	public boolean update(Product updateProduct);
+	public boolean remove(int id);
+	public List<Process> view(String tableProduct);
+}

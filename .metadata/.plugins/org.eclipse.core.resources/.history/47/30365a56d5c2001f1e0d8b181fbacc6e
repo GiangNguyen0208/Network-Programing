@@ -1,0 +1,10 @@
+/**
+ * 
+ */
+/**
+ * 
+ */
+module NetWorkRMI {
+	requires java.sql;
+	requires java.rmi;
+}

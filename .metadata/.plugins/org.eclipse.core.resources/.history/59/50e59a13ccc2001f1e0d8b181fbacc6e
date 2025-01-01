@@ -1,0 +1,21 @@
+package rmi_de1;
+
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+
+public class UserDAO extends UnicastRemoteObject implements IUserDAO{
+
+	protected StudentDAO() throws RemoteException {
+	}
+
+	@Override
+	public boolean checkUsername(String username) throws RemoteException {
+		return false;
+	}
+
+	@Override
+	public boolean login(String username, String password) throws RemoteException {
+		return false;
+	}
+
+}

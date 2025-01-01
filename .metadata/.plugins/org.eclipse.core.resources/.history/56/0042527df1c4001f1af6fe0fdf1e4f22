@@ -1,0 +1,7 @@
+package rmi_de2;
+
+import java.rmi.server.UnicastRemoteObject;
+
+public class UserDAO extends UnicastRemoteObject implements IUser{ 
+
+}

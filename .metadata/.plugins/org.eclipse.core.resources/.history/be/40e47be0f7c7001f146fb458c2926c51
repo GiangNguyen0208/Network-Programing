@@ -1,0 +1,131 @@
+package rmi_1;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
+public class Client {
+	public static void main(String[] args) throws RemoteException, NotBoundException {
+		try {
+			Registry registry = LocateRegistry.getRegistry(7753);
+			IUser userDAO = (IUser) registry.lookup("userDAO");
+			IProduct productDAO = (IProduct) registry.lookup("productDAO");
+			BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+			
+			// Run
+			System.out.println("WELCOME TO MANAGE PRODUCT SYSTEM");
+				String userInput = "";
+				String username = "", password = "";
+				String status = "";
+				boolean isLogin = false;
+				List<Product> products = new ArrayList<>();
+				
+				//Login
+				while (!isLogin) {
+					try {
+						userInput = input.readLine();
+						if ("EXIT".equals(userInput)) {
+							System.out.println("SYSTEM EXIT...");
+							break;
+						}
+						StringTokenizer tokenizer = new StringTokenizer(userInput, "\t");
+						String cmd = tokenizer.nextToken().toUpperCase();
+						String param = tokenizer.hasMoreTokens() ? tokenizer.nextToken() : "";
+						switch (cmd) {
+						case "USER": {
+							username = param;
+							status = (userDAO.checkUsername(username)) ? "OK" : "FALSE";
+							System.out.println(status);
+							break;
+						}
+						case "PASS": {
+							password = param;
+							isLogin = userDAO.checkLogin(username, password);
+							status = (isLogin) ? "OK" : "FALSE";
+							System.out.println("Login: "+status);
+							break;
+						}
+						default:
+							System.out.println("WRONG COMMAND");
+						}
+					} catch (Exception e) {
+						System.out.println("WRONG COMMAND");
+					}
+				}
+				while (isLogin) {
+					userInput = input.readLine();
+					if ("QUIT".equals(userInput)) break;
+					StringTokenizer tokenizer = new StringTokenizer(userInput, "\t");
+					String cmd = tokenizer.nextToken().toUpperCase();
+					List<String> parameters = new ArrayList<>();
+					while (tokenizer.hasMoreTokens()) {
+						parameters.add(tokenizer.nextToken());
+					}
+					switch (cmd) {
+					case "ADD": {
+						if (parameters.size() < 4) {
+							System.out.println("Parameters cung cap khong du.");
+							break;
+						}
+						int id = Integer.valueOf(parameters.get(0));
+						String name = parameters.get(1);
+						double price = Double.valueOf(parameters.get(2));
+						int quantity = Integer.valueOf(parameters.get(3));
+						boolean isAdd = productDAO.add(new Product(id, name, price, quantity));
+						status = (isAdd) ? "OK" : "FALSE";
+						System.out.println("Status ADD: "+status);
+						break;
+					}
+					case "EDIT": {
+						if (parameters.size() < 4) {
+							System.out.println("Parameters cung cap khong du.");
+							break;
+						}
+						int id = Integer.valueOf(parameters.get(0));
+						String name = parameters.get(1);
+						double price = Double.valueOf(parameters.get(2));
+						int quantity = Integer.valueOf(parameters.get(3));
+						boolean isEdit = productDAO.edit(new Product(id, name, price, quantity));
+						status = (isEdit) ? "OK" : "FALSE";
+						System.out.println("Status Edit: "+status);
+						break;
+					}
+					case "REMOVE": {
+						int id = Integer.valueOf(parameters.get(0));
+						boolean isRemove = productDAO.remove(id);
+						status = (isRemove) ? "OK" : "FALSE";
+						System.out.println("Status Remove: "+status);
+						break;
+					}
+					case "FBN": {
+						String name = parameters.get(0);
+						products = productDAO.findByName(name);
+						for (Product p : products) {
+							System.out.println(p.toString());
+						}
+						break;
+					}
+					case "FBID": {
+						int id = Integer.valueOf(parameters.get(0));
+						Product product = productDAO.findByID(id);
+						System.out.println(product.toString());
+						break;
+					}
+					default:
+						System.out.println("WRONG COMMAND");
+					}
+					
+				}
+			
+		} catch (Exception e) {
+			System.out.println("WRONG COMMAND");
+		}
+		
+	}
+}

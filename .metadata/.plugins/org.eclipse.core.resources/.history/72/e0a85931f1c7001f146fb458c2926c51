@@ -1,0 +1,8 @@
+package rmi_1;
+
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+
+public interface IProduct extends Remote {
+	public boolean add(Product newProduct) throws RemoteException;
+}

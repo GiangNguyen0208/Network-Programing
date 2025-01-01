@@ -1,0 +1,51 @@
+package tcp;
+
+import java.io.*;
+import java.net.Socket;
+import java.sql.SQLException;
+import java.util.*;
+
+public class ServerThread extends Thread {
+	Socket socket;
+	BufferedReader input;
+	PrintWriter output;
+	UserDAO userDAO;
+	String cmd ="", param = "";
+	
+	public ServerThread(Socket socket) throws IOException {
+		this.socket = socket;
+		input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		output = new PrintWriter(socket.getOutputStream(), true);
+		userDAO = new UserDAO();
+	}
+	@Override
+	public void run() {
+		output.println("WELCOME TO MANAGE PRODUCT SYSTEM !!!");
+		String userInput = "";
+		boolean isLogin = false;
+		String status = "";
+		String username = "", password = "";
+		
+		while (!isLogin) {
+			try {
+				userInput = input.readLine();
+				StringTokenizer tokenizer = new StringTokenizer(userInput, "\t");
+				analyzeCmd(userInput);
+				
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		}
+		
+		
+	}
+	private void analyzeCmd(String userInput) {
+		StringTokenizer tokenizer = new StringTokenizer(cmd, param)
+		cmd = tokenizer.nextToken().toUpperCase();
+		param = tokenizer.hasMoreTokens() ? tokenizer.nextToken() : "";
+	}
+}

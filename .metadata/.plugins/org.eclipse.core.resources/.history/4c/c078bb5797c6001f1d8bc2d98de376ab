@@ -1,0 +1,61 @@
+package tcp;
+
+import java.io.*;
+import java.net.Socket;
+import java.sql.SQLException;
+import java.util.*;
+
+public class ServerThread extends Thread {
+	Socket socket;
+	BufferedReader input;
+	PrintWriter output;
+	UserDAO userDAO;
+	
+	public ServerThread(Socket socket) throws IOException {
+		this.socket = socket;
+		input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		output = new PrintWriter(socket.getOutputStream(), true);
+		userDAO = new UserDAO();
+	}
+	@Override
+	public void run() {
+		output.println("WELCOME TO MANAGE PRODUCT SYSTEM !!!");
+		String userInput = "";
+		boolean isLogin = false;
+		String status = "";
+		String username = "", password = "";
+		String cmd ="", param = "";
+		while (!isLogin) {
+			try {
+				userInput = input.readLine();
+				if (userInput.equals("EXIT"))
+					break;
+				try {
+					StringTokenizer tokenizer = new StringTokenizer(userInput, "\t");
+					cmd = tokenizer.nextToken().toUpperCase();
+					param = tokenizer.hasMoreTokens() ? tokenizer.nextToken() : "";
+					switch (cmd) {
+					case "USER": {
+						username = param;
+						status = (userDAO.checkUsername(username)) ? "OK" : "False";
+						output.println("Check Username: " + status);
+						break;
+					}
+					case "PASS": {
+						password = param;
+						status = (userDAO.checkLogin(username, password)) ? "OK" : "False";
+						output.println("Check Login: " + status);
+						break;
+					}
+					default:
+						output.println("WRONG CMD: " + cmd);
+					}
+				} catch (SQLException e) {
+					output.println("WRONG CMD: " + cmd);
+				}
+			} catch (IOException e) {
+				output.println("WRONG CMD: " + cmd);
+			}
+		}
+	}
+}

@@ -1,0 +1,13 @@
+package socketTCP_uploadVsDownload;
+
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
+
+public class Threadling extends Thread {
+	private Socket clientSocket; 
+    private BufferedReader in;
+    private PrintWriter out;
+    private UserDAO userDAO;
+}

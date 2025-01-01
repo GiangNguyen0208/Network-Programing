@@ -1,0 +1,14 @@
+package rmi_de2;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class UCanAccessConnector {
+	static Connection conn;
+	public static Connection getConnection() {
+		String fileAccess = ""
+		String url = "net.ucanaccess.jdbc://" + fileAccess;
+		conn = DriverManager.getConnection(url);
+		
+	}
+}

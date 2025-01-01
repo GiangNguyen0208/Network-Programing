@@ -1,0 +1,44 @@
+package tcp_1;
+
+import java.sql.SQLException;
+import java.util.List;
+
+public class ProductDAO implements IProduct{
+
+	@Override
+	public boolean add(Product newProduct) throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean edit(Product updateProduct) throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean remove(int id) throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<Product> view(String tableProduct) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Product> fbn(String name) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Product> fbid(int id) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

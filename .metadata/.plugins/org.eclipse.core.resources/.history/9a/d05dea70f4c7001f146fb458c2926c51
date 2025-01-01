@@ -1,0 +1,25 @@
+package rmi_1;
+
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+
+public class Client {
+	public static void main(String[] args) throws RemoteException, NotBoundException {
+		try {
+			Registry registry = LocateRegistry.getRegistry(7753);
+			IUser userDAO = (IUser) registry.lookup("userDAO");
+			IProduct productDAO = (IProduct) registry.lookup("productDAO");
+			
+			
+			
+			
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+	}
+}

@@ -1,0 +1,32 @@
+package rmi_de1;
+
+import java.rmi.RemoteException;
+import java.util.List;
+
+public class StudentDAO implements IStudentDAO {
+
+	@Override
+	public boolean add(Student newStudent) throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean remove(int id) throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean edit(Student newStudent) throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<Student> view(String nameStudent) throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

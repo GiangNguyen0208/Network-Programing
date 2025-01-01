@@ -1,0 +1,68 @@
+package tcp_1;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.StringTokenizer;
+
+import org.hsqldb.Token;
+
+public class ClientHandling extends Thread {
+	Socket socket;
+	BufferedReader in;
+	PrintWriter out;
+	UserDAO userDAO;
+	ProductDAO productDAO;
+	
+	public ClientHandling(Socket socket) throws IOException {
+		this.socket = socket;
+		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		out = new PrintWriter(socket.getOutputStream(), true);
+		userDAO = new UserDAO();
+		productDAO = new ProductDAO();
+	}
+	
+	@Override
+	public void run() {
+		System.out.println("WELCOME TO PRODUCTS SYSTEM !!!");
+		String userInput = "", username = "", password ="", sessionID ="";
+		String status = "";
+		
+		while (sessionID.isEmpty()) {
+			out.println("ENTER CMD (EXIT Command to exit): ");
+			try {
+				userInput = in.readLine();
+				if (userInput.equalsIgnoreCase("EXIT")) {
+					System.out.println("EXIT SYSTEM...");
+					return;
+				}
+				StringTokenizer tokenizer = new StringTokenizer(userInput, "\t");
+				String cmd = tokenizer.nextToken().toUpperCase();
+				String param = tokenizer.nextToken();
+				
+				switch (cmd) {
+				case "USER": {
+					username = param;
+					if (param.isEmpty()) {
+						System.out.println("Vui lòng nhập đầy đủ thông tin !!!");
+					}
+					status = (userDAO.checkUsername(username)) ? "OK" : "FALSE";
+					
+					break;
+				}
+				default:
+					throw new IllegalArgumentException("Unexpected value: " + cmd);
+				}
+				
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+	}
+	
+}

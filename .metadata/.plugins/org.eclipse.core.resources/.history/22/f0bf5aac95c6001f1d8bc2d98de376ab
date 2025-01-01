@@ -1,0 +1,115 @@
+package tcp;
+
+import java.io.*;
+import java.net.Socket;
+import java.sql.SQLException;
+import java.util.*;
+
+public class ServerThread extends Thread {
+	Socket socket;
+	BufferedReader input;
+	PrintWriter output;
+	UserDAO userDAO;
+	
+	public ServerThread(Socket socket) throws IOException {
+		this.socket = socket;
+		input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		output = new PrintWriter(socket.getOutputStream(), true);
+		userDAO = new UserDAO();
+	}
+	@Override
+	public void run() {
+		output.println("WELCOME TO MANAGE PRODUCT SYSTEM !!!");
+		String userInput = "";
+		boolean isLogin = false;
+		String status = "";
+		String username = "", password = "";
+		while (true) {
+			try {
+				userInput = input.readLine();
+				StringTokenizer tokenizer = new StringTokenizer(userInput, "\t");
+				String command = tokenizer.nextToken().toUpperCase();
+				String param = tokenizer.hasMoreTokens() ? tokenizer.nextToken() : "";
+				
+				if (!isLogin) {
+					while (command.equalsIgnoreCase("EXIT")) {
+						System.out.println("System EXIT....");
+						break;
+					}
+					switch (command) {
+					case "USER": {
+						username = param;
+						// Check username
+						status = (userDAO.checkUsername(username)) ? "OK" : "FALSE";
+						// sysout status
+						output.println(status);
+						break;
+					}
+					case "PASS": {
+						password = param;
+						// Check login
+						isLogin = (userDAO.checkLogin(username, password));
+						status = isLogin ? "OK" : "FALSE";
+						// sysout status
+						output.println(status);
+						break;
+					}
+					default:
+						output.println("WRONG CMD !!!");
+					}
+				// Khi login thành công
+				} else {
+					List<String> parameters = new ArrayList<>();
+					while (tokenizer.hasMoreTokens()) {
+						parameters.add(tokenizer.nextToken());
+					}
+					while (command.equalsIgnoreCase("QUIT")) {
+						System.out.println("QUIT SYSTEM...");
+						break;
+					}
+					switch (command) {
+					// Xem thông tin bảng Product.
+					case "VIEW": {
+						String tablename = parameters.get(0);
+						// Lấy danh sách products.
+						List<Product> products;
+						// In ra màn hình.
+						break;
+					}
+					// Thê, Product
+					case "ADD": {
+						int id = Integer.parseInt(parameters.get(0));
+						String name = parameters.get(1);
+						double price = Double.parseDouble(parameters.get(2));
+						int quantity = Integer.parseInt(parameters.get(3));
+						Product newProduct = new Product(id, name, price, quantity);
+						// Thêm product
+						// sysout status
+						break;
+					}
+					case "UPDATE": {
+						int idUpdate = Integer.parseInt(parameters.get(0));
+						String name = parameters.get(1);
+						double price = Double.parseDouble(parameters.get(2));
+						int quantity = Integer.parseInt(parameters.get(3));
+						Product productUpdate = new Product(idUpdate, name, price, quantity);
+						// Cập nhật product
+						// sysout status
+						break;
+					}
+					case "REMOVE": {
+						int idRemove = Integer.parseInt(parameters.get(0));
+						// Thực hiện remove
+						// sysout status
+						break;
+					}
+					default:
+						output.println("WRONG CMD !!!");
+					}
+				}
+			} catch (IOException | SQLException e) {
+				output.println("WRONG CMD !!!");
+			}
+		}
+	}
+}

@@ -1,0 +1,19 @@
+package tcp;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class Server {
+	public static void main(String[] args) {
+		try {
+			ServerSocket serverSocket = new ServerSocket(4455);
+			Socket clientSocket = serverSocket.accept();
+			Client client = new Client(clientSocket);
+			client.start();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}

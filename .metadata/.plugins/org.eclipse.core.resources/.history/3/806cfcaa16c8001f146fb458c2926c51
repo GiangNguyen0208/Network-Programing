@@ -1,0 +1,67 @@
+package tcp_1;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
+
+public class ProductDAO implements IProduct{
+
+	@Override
+	public boolean add(Product newProduct) throws SQLException {
+		Connection connection = ConnectUCanaccess.getConnection();
+		String sql = "Insert Into products (ID, Name, Price, Quantity) Values (?,?,?,?)";
+		PreparedStatement preparedStatement = connection.prepareStatement(sql);
+		preparedStatement.setInt(1, newProduct.getId());
+		preparedStatement.setString(2, newProduct.getName());
+		preparedStatement.setDouble(3, newProduct.getPrice());
+		preparedStatement.setInt(4, newProduct.getQuantity());
+		int rowAffected = preparedStatement.executeUpdate();
+		return rowAffected > 0;
+	}
+
+	@Override
+	public boolean edit(Product updateProduct) throws SQLException {
+		Connection connection = ConnectUCanaccess.getConnection();
+		String sql = "Update products Set Name, Price, Quantity Where ID = ?";
+		PreparedStatement preparedStatement = connection.prepareStatement(sql);
+		preparedStatement.setString(1, updateProduct.getName());
+		preparedStatement.setDouble(2, updateProduct.getPrice());
+		preparedStatement.setInt(3, updateProduct.getQuantity());
+		preparedStatement.setInt(4, updateProduct.getId());
+		int rowAffected = preparedStatement.executeUpdate();
+		return rowAffected > 0;
+	}
+
+	@Override
+	public boolean remove(int id) throws SQLException {
+		Connection connection = ConnectUCanaccess.getConnection();
+		String sql = "Delete From products Where ID = ?";
+		PreparedStatement preparedStatement = connection.prepareStatement(sql);
+		preparedStatement.setString(1, updateProduct.getName());
+		preparedStatement.setDouble(2, updateProduct.getPrice());
+		preparedStatement.setInt(3, updateProduct.getQuantity());
+		preparedStatement.setInt(4, updateProduct.getId());
+		int rowAffected = preparedStatement.executeUpdate();
+		return rowAffected > 0;
+	}
+
+	@Override
+	public List<Product> view(String tableProduct) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Product> fbn(String name) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Product> fbid(int id) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

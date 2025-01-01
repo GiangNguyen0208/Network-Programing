@@ -1,0 +1,82 @@
+package rmi_2;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.StringTokenizer;
+
+public class Client {
+	public static void main(String[] args) throws RemoteException, NotBoundException {
+		try {
+			Registry registry = LocateRegistry.getRegistry(12345);
+			IUser userDAO = (IUser) registry.lookup("userDAO");
+			IProduct productDAO = (IProduct) registry.lookup("productDAO");
+			BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+			
+			System.out.println("WELCOM TO STUDENT SYSTEM");
+			String userInput = "";
+			String username = "", password ="", status = "";
+			String sessionID = "";
+			
+			while (sessionID.isEmpty()) {
+				System.out.println("Enter Command (EXIT Command to Exit): ");
+				userInput = input.readLine();
+				if (userInput.equalsIgnoreCase("EXIT")) {
+					System.out.println("SYSTEM EXIT...");
+					return;
+				}
+				StringTokenizer tokenizer = new StringTokenizer(userInput, "\t");
+				String cmd = tokenizer.nextToken().toUpperCase();
+				String param = tokenizer.hasMoreTokens() ? tokenizer.nextToken() : "";
+				switch (cmd) {
+				case "USER": {
+					if (param.isEmpty()) {
+						System.out.println("Vui lòng nhập username !!!");
+					}
+					username = param;
+					status = (userDAO.checkUsername(username)) ? "OK" : "FALSE";
+					System.out.println("Username Check: "+status);
+					break;
+				}
+				case "PASS": {
+					if (param.isEmpty()) {
+						System.out.println("Vui lòng nhập password !!!");
+					}
+					password = param;
+					status = (userDAO.checkUsername(username)) ? "OK" : "FALSE";
+					sessionID = (userDAO.createSessionID(username));
+					System.out.println("Login Status: " + status + ", with SESSIONID: " + sessionID);
+					break;
+				}
+				default:
+					throw new IllegalArgumentException("Unexpected value: " + cmd);
+				}
+			}
+			while (!sessionID.isEmpty()) {
+				System.out.println("Enter Command (QUIT Command to Exit): ");
+				userInput = input.readLine();
+				if (userInput.equalsIgnoreCase("QUIT")) {
+					userDAO.logout(sessionID);
+					sessionID = "";
+					System.out.println("SYSTEM QUIT... + Your SessionID: " + sessionID);
+					return;
+				}
+				if (!userDAO.checkSessionID(sessionID)) {
+					System.out.println("Your SessionID: " + sessionID + " is INVALID");
+					sessionID = "";
+				} else {
+					System.out.println("Your SessionID: " + sessionID + " is VALID");
+				}
+				
+				
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+	}
+}

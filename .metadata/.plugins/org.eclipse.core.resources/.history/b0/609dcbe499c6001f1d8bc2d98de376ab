@@ -1,0 +1,41 @@
+package tcp;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
+
+public class ProductDAO implements IProductDAO {
+
+	@Override
+	public boolean add(Product newProduct) throws SQLException {
+		Connection connection = UCanAccessConnector.getConnection();
+		String sql = "Insert into products (ID =?, Name = ?, Price = ?, Quantity = ? ) Values (?,?,?,?)";
+		PreparedStatement preparedStatement = connection.prepareStatement(sql);
+		preparedStatement.setInt(1, newProduct.getId());
+		preparedStatement.setString(2, newProduct.getName());
+		preparedStatement.setDouble(3, newProduct.getPrice());
+		preparedStatement.setInt(4, newProduct.getQuantity());
+		int rowAffected = preparedStatement.executeUpdate();
+		return rowAffected>0;
+	}
+
+	@Override
+	public boolean update(Product updateProduct) throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean remove(int id) throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<Process> view(String tableProduct) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+}

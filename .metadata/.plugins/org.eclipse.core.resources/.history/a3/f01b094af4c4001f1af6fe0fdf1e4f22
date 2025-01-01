@@ -1,0 +1,16 @@
+package rmi_de2;
+
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+
+public class Server {
+	public static void main(String[] args) throws RemoteException {
+		IUser userDao = new UserDAO();
+		IStudent studentDao = new StudentDAO();
+		Registry req = LocateRegistry.createRegistry(9630);
+		req.bind("userDao", userDao);
+		req.bind("studentDao", studentDao);
+		
+	}
+}

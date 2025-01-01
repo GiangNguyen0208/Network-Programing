@@ -1,0 +1,7 @@
+package rmi_2;
+
+import java.rmi.Remote;
+
+public interface IProduct extends Remote {
+	public boolean add(Student newStudent) throw
+}

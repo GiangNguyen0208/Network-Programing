@@ -1,0 +1,53 @@
+package tcp_1;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+
+public class UserDAO implements IUser {
+	
+	Map<String, String> map = new HashMap<>();
+
+	@Override
+	public boolean checkUsername(String username) throws SQLException {
+		Connection connection = ConnectUCanaccess.getConnection();
+		String sql = "Select * From users Where username = ?";
+		PreparedStatement preparedStatement = connection.prepareStatement(sql);
+		preparedStatement.setString(1, username);
+		ResultSet rs = preparedStatement.executeQuery();
+		return rs.next();
+	}
+
+	@Override
+	public boolean checkLogin(String username, String password) throws SQLException {
+		Connection connection = ConnectUCanaccess.getConnection();
+		String sql = "Select * From users Where username = ? And password = ?";
+		PreparedStatement preparedStatement = connection.prepareStatement(sql);
+		preparedStatement.setString(1, username);
+		preparedStatement.setString(2, password);
+		ResultSet rs = preparedStatement.executeQuery();
+		return rs.next();
+	}
+
+	@Override
+	public String createSessionID(String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean checkSessionID(String sessionID) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void logout(String sessionID) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}

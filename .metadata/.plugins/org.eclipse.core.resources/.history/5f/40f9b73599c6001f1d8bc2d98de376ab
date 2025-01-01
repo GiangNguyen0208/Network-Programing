@@ -1,0 +1,30 @@
+package tcp;
+
+import java.util.List;
+
+public class ProductDAO implements IProductDAO {
+
+	@Override
+	public boolean add(Product newProduct) {
+		return false;
+	}
+
+	@Override
+	public boolean update(Product updateProduct) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean remove(int id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<Process> view(String tableProduct) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+}

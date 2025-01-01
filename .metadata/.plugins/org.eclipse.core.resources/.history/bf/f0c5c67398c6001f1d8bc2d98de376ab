@@ -1,0 +1,62 @@
+package tcp;
+
+import java.io.*;
+import java.net.Socket;
+import java.sql.SQLException;
+import java.util.*;
+
+public class ServerThread extends Thread {
+	Socket socket;
+	BufferedReader input;
+	PrintWriter output;
+	UserDAO userDAO;
+	
+	public ServerThread(Socket socket) throws IOException {
+		this.socket = socket;
+		input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		output = new PrintWriter(socket.getOutputStream(), true);
+		userDAO = new UserDAO();
+	}
+	@Override
+	public void run() {
+		output.println("WELCOME TO MANAGE PRODUCT SYSTEM !!!");
+		String userInput = "";
+		boolean isLogin = false;
+		String status = "";
+		String username = "", password = "";
+		String cmd ="", param = "";
+		while (!isLogin) {
+			try {
+				userInput = input.readLine();
+				if (userInput.equals("EXIT"))
+					break;
+				try {
+					StringTokenizer stringTokenizer = new StringTokenizer(userInput, "\t");
+					String command = stringTokenizer.nextToken();
+					String parameter = stringTokenizer.nextToken();
+					switch (command) {
+					case "USER":
+						username = parameter;
+						status = userDAO.checkUsername(username) ? "OK" : "FALSE";
+						output.println(status);
+						break;
+					case "PASS":
+						password = parameter;
+						status = userDAO.checkLogin(username, password) ? "OK" : "FALSE";
+						if (status.equals("OK"))
+							isLogin = true;
+						output.println(status);
+						break;
+					default:
+						output.println("Sai cau lenh");
+					}
+				} catch (NoSuchElementException | SQLException e) {
+					output.println("Sai cau lenh");
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				output.println("Sai cau lenh");
+			}
+		}
+	}
+}

@@ -1,0 +1,91 @@
+package rmi_de1;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.StringTokenizer;
+
+public class Client {
+	public static void main(String[] args) throws RemoteException, NotBoundException {
+		Registry registry = LocateRegistry.getRegistry(1234);
+		IUserDAO userDAO = (IUserDAO) registry.lookup("userDAO");
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		String userInput = "";
+		boolean isLogin = false;
+		String param ="";
+		String cmd ="";
+		String status = "";
+		String username ="", password ="";
+		System.out.println("WELCOME TO MANAGE PRODUCT SYSTEM");
+		while (!isLogin) {
+			try {
+				userInput = in.readLine();
+				if (userInput == null || userInput.equalsIgnoreCase("EXIT")) {
+					System.out.println("EXIT System....");
+					break;
+				}
+				StringTokenizer tokenizer = new StringTokenizer(userInput, "\t");
+				cmd = tokenizer.nextToken().toUpperCase();
+				param = tokenizer.nextToken();
+				
+				switch (cmd) {
+					case "USER": {
+						username = param;
+						status = (userDAO.checkUsername(username)) ? "OK" : "False";
+						System.out.println("Check Username: " + status);
+						break;
+					}
+					case "PASS": {
+						password = param;
+						status = (userDAO.login(username, password)) ? "OK" : "False";
+						System.out.println("Login: " + status);
+						break;
+					}
+					default:
+						System.out.println("WRONG CMD !!!");
+					}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		while (isLogin) {
+			try {
+				userInput = in.readLine();
+				if (userInput == null || userInput.equalsIgnoreCase("QUIT")) {
+					System.out.println("EXIT System....");
+					break;
+				}
+				StringTokenizer tokenizer = new StringTokenizer(userInput, "\t");
+				cmd = tokenizer.nextToken().toUpperCase();
+				param = tokenizer.nextToken();
+				
+				switch (cmd) {
+					case "USER": {
+						username = param;
+						status = (userDAO.checkUsername(username)) ? "OK" : "False";
+						System.out.println("Check Username: " + status);
+						break;
+					}
+					case "PASS": {
+						password = param;
+						status = (userDAO.login(username, password)) ? "OK" : "False";
+						System.out.println("Login: " + status);
+						break;
+					}
+					default:
+						System.out.println("WRONG CMD !!!");
+					}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		
+	}
+}
