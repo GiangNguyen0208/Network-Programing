@@ -1,0 +1,52 @@
+package tcp_2;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
+
+public class ProductDAO implements IProduct{
+
+	@Override
+	public boolean add(Student newStudent) throws SQLException {
+		Connection conn = UCanAccessConnector.getConnection();
+		String query = "Insert into Student (ID, Name, BirthDay, Grade) values (?,?,?,?)";
+		PreparedStatement preparedStatement = conn.prepareStatement(query);
+		preparedStatement.setInt(1, newStudent.getId());
+		preparedStatement.setString(2, newStudent.getName());
+		preparedStatement.setInt(3, newStudent.getBirthDay());
+		preparedStatement.setInt(4, newStudent.getGrade());
+		return false;
+	}
+
+	@Override
+	public boolean edit(Student updateStudent) throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean remove(int id) throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<Student> view(String tableStudent) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Student> fbn(String name) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Student> fbid(int id) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

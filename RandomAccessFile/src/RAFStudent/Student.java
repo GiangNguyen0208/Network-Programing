@@ -48,12 +48,42 @@ public class Student {
 		try {
 			raf.writeByte(0);
 			raf.writeInt(id);
-			raf.writeUTF(name);
+			writeName(raf);
 			raf.writeDouble(grade);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
+	}
+	private void writeName(RandomAccessFile raf) throws IOException {
+		for (int i = 0; i < StudentManager.NAME_LENG; i++) {
+			if (i < name.length()) {
+				raf.writeChar(name.charAt(i));
+			} else {
+				raf.writeChar(0);
+			}
+		}
+	}
+	public void readData(RandomAccessFile raf) {
+		try {
+			this.id = raf.readInt();
+			this.name = readName(raf);
+			this.grade = raf.readDouble();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	private String readName(RandomAccessFile raf) throws IOException {
+		String name = "";
+		for (int i = 0; i < StudentManager.NAME_LENG; i++) {
+			char c = raf.readChar();
+			if (c != 0) {
+				name += c;
+			}
+		}
+		return name;
 	}
 }

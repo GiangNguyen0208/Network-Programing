@@ -1,0 +1,64 @@
+package tcp_2;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
+
+public class ProductDAO implements IProduct{
+
+	@Override
+	public boolean add(Student newStudent) throws SQLException {
+		Connection conn = UCanAccessConnector.getConnection();
+		String query = "Insert into Student (ID, Name, BirthDay, Grade) values (?,?,?,?)";
+		PreparedStatement preparedStatement = conn.prepareStatement(query);
+		preparedStatement.setInt(1, newStudent.getId());
+		preparedStatement.setString(2, newStudent.getName());
+		preparedStatement.setInt(3, newStudent.getBirthDay());
+		preparedStatement.setDouble(4, newStudent.getGrade());
+		int rowAffected = preparedStatement.executeUpdate();
+		return rowAffected > 0;
+	}
+
+	@Override
+	public boolean edit(Student updateStudent) throws SQLException {
+		Connection conn = UCanAccessConnector.getConnection();
+		String query = "Update Student Set Name, BirthDay, Grade Where ID = ?";
+		PreparedStatement preparedStatement = conn.prepareStatement(query);
+		preparedStatement.setInt(4, updateStudent.getId());
+		preparedStatement.setString(1, updateStudent.getName());
+		preparedStatement.setInt(2, updateStudent.getBirthDay());
+		preparedStatement.setDouble(3, updateStudent.getGrade());
+		int rowAffected = preparedStatement.executeUpdate();
+		return rowAffected > 0;
+	}
+
+	@Override
+	public boolean remove(int id) throws SQLException {
+		Connection conn = UCanAccessConnector.getConnection();
+		String query = "Delete From Student Where ID = ?)";
+		PreparedStatement preparedStatement = conn.prepareStatement(query);
+		preparedStatement.setInt(1, id);
+		int rowAffected = preparedStatement.executeUpdate();
+		return rowAffected > 0;
+	}
+
+	@Override
+	public List<Student> view(String tableStudent) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Student> fbn(String name) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Student> fbid(int id) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

@@ -1,0 +1,78 @@
+package tcp_2;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.StringTokenizer;
+
+public class ClientHandling extends Thread{
+	Socket socket;
+	BufferedReader in;
+	PrintWriter out;
+	UserDAO userDAO;
+	
+	public ClientHandling(Socket clientSocket) throws IOException {
+		this.socket = socket;
+		in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+		out = new PrintWriter(clientSocket.getOutputStream(), true);
+		userDAO = new UserDAO();
+		
+	}
+	@Override
+	public void run() {
+		out.println("WELCOME TO STUDENT SYSTEM");
+		String sessionID = "", username ="", password = "";
+		String status = "";
+		String userInput = "";
+		try {
+			while (!sessionID.isEmpty()) {
+				out.println("Enter command (EXIT Command to Exit): ");
+				userInput = in.readLine();
+				if (userInput.equalsIgnoreCase("EXIT")) {
+					out.println("EXIT SYSTEM...");
+					return;
+				}
+				StringTokenizer tokenizer = new StringTokenizer(userInput, "\t");
+				String command = tokenizer.nextToken().toUpperCase();
+				String param = tokenizer.hasMoreTokens() ? tokenizer.nextToken() : "";
+				
+				switch (command) {
+				case "USER": {
+					username = param;
+					status = (userDAO.checkUsername(username)) ? "OK" : "FALSE";
+					out.print("CHECK USERNAME: " + status);
+					break;
+				}
+				case "PASS": {
+					password = param;
+					boolean isLogin = userDAO.checkLogin(username, password);
+					status = (isLogin) ? "OK" : "FALSE";
+					sessionID = userDAO.createSessionID(username);
+					out.print("CHECK LOGIN: " + status + " WITH SESSIONID: " + sessionID);
+					break;
+				}
+				default:
+					out.println("WRONG CMD");
+				}
+			}
+			
+			while (!sessionID.isEmpty()) {
+				out.println("Enter command (EXIT Command to Exit): ");
+				userInput = in.readLine();
+				if (userInput.equalsIgnoreCase("QUIT")) {
+					userDAO.removeSession(sessionID);
+					sessionID = null;
+					out.println("QUIT SYSTEM...");
+					return;
+				}
+			}
+			
+		} catch (Exception e) {
+			out.println("WRONG CMD");
+		}
+		
+		
+	}
+}
